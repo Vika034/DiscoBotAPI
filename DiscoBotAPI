@@ -1,0 +1,54 @@
+import discord
+import requests
+from discord.ext import commands
+import random
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+def get_dog_image_url():
+    url = 'https://random.dog/woof.json'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+@bot.command('dog')
+async def dog(ctx):
+    image_url = get_dog_image_url()
+    await ctx.send(image_url)
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Привет пользователь! Я {bot.user}!')
+    await ctx.send(f'как Ваши дела?')
+    await ctx.send(f'надеюсь всё хорошо)<3')
+    await ctx.send('Чтобы узнать какие команды есть в боте напишите "/help"')
+
+@bot.command()
+async def misha(ctx):
+    await ctx.send(f'Мишаа!)')
+    await ctx.send(f'он хороший хомяк)')
+
+@bot.command()
+async def ILoveU(ctx):
+    await ctx.send(f'Я Вас тоже очень люблю, пользователь!)<33')
+    await ctx.send(f'Вы сольнышко!<3')
+
+@bot.command()
+async def mem(ctx):
+    ran = random.randint(1,4)
+    with open(f'images/mem{ran}.jpg', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)
+
+@bot.command()
+async def bye(ctx):
+    await ctx.send(f'пока пользователь, до новых встреч)<3')
+
+bot.run("MTE1MjYxNzAwNjA3NjUzMDc5MA.G0dQcC.MtRKs9v-2_VAaAHLoe2nwP8-G8qysp9TXaczPo")
